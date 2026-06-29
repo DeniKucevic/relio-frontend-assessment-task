@@ -1,0 +1,77 @@
+import { type ReactNode, createContext, useContext, useReducer } from 'react'
+
+import type { Item } from '@/types'
+
+const MAX_SELECTED = 3
+
+type State = {
+  committed: Item[]
+  draft: Item[]
+}
+
+type Action =
+  //copies committed into draft
+  | { type: 'OPEN_PANEL' }
+  //adds/removes item from draft (max 3)
+  | { type: 'TOGGLE_ITEM'; item: Item }
+  //removes item from draft by id
+  | { type: 'REMOVE_DRAFT'; id: number }
+  //removes item from committed by id
+  | { type: 'REMOVE_COMMITTED'; id: number }
+  // copies draft into committed
+  | { type: 'SAVE' }
+  //restores draft from committed
+  | { type: 'CANCEL' }
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'OPEN_PANEL':
+      return { ...state, draft: [...state.committed] }
+    case 'TOGGLE_ITEM': {
+      const isSelected = state.draft.some((i) => i.id === action.item.id)
+      if (isSelected)
+        return {
+          ...state,
+          draft: state.draft.filter((i) => i.id !== action.item.id),
+        }
+      if (state.draft.length >= MAX_SELECTED) return state
+      return { ...state, draft: [...state.draft, action.item] }
+    }
+    case 'REMOVE_DRAFT':
+      return { ...state, draft: state.draft.filter((i) => i.id !== action.id) }
+    case 'REMOVE_COMMITTED':
+      return {
+        ...state,
+        committed: state.committed.filter((i) => i.id !== action.id),
+      }
+    case 'SAVE':
+      return { ...state, committed: [...state.draft] }
+    case 'CANCEL':
+      return { ...state, draft: [...state.committed] }
+    default:
+      return state
+  }
+}
+
+type SelectionContextValue = {
+  state: State
+  dispatch: React.Dispatch<Action>
+}
+
+const SelectionContext = createContext<SelectionContextValue | null>(null)
+
+export const SelectionProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(reducer, { committed: [], draft: [] })
+  return (
+    <SelectionContext.Provider value={{ state, dispatch }}>
+      {children}
+    </SelectionContext.Provider>
+  )
+}
+
+export const useSelection = () => {
+  const ctx = useContext(SelectionContext)
+  if (!ctx)
+    throw new Error('useSelection must be used within a SelectionProvider')
+  return ctx
+}
