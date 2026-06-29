@@ -1,27 +1,26 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { ElementList } from '@/components/element-list'
 import { TagList } from '@/components/tag-list'
-import { SEARCH_DEBOUNCE_MS } from '@/config'
-import { actions, useSelection } from '@/context/selection-context'
+import { MAX_SELECTED, SEARCH_DEBOUNCE_MS } from '@/config'
+import {
+    actions,
+    useSelectionDispatch,
+    useSelectionState,
+} from '@/context/selection-context'
 import { useDebounce } from '@/hooks/useDebounce'
 import { applyFilter } from '@/utils/filter-items'
-import { Button, ButtonGroup, Input, Paper } from '@mui/material'
+import { Button, ButtonGroup, Input, Paper, Select } from '@mui/material'
 
 import type { FilterOption, Item } from '@/types'
 
 type SelectionPanelProps = {
   items: Item[]
-  onSave: () => void
-  onCancel: () => void
 }
 
-export const SelectionPanel = ({
-  items,
-  onSave,
-  onCancel,
-}: SelectionPanelProps) => {
-  const { dispatch, state } = useSelection()
+export const SelectionPanel = ({ items }: SelectionPanelProps) => {
+  const state = useSelectionState()
+  const dispatch = useSelectionDispatch()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none')
@@ -39,23 +38,27 @@ export const SelectionPanel = ({
     [state.draft],
   )
 
-  const handleToggle = (item: Item) => {
-    dispatch(actions.toggleItem(item))
-  }
+  const handleToggle = useCallback(
+    (item: Item) => {
+      dispatch(actions.toggleItem(item))
+    },
+    [dispatch],
+  )
 
-  const handleTagRemove = (id: number) => {
-    dispatch(actions.removeDraft(id))
-  }
+  const handleTagRemove = useCallback(
+    (id: number) => {
+      dispatch(actions.removeDraft(id))
+    },
+    [dispatch],
+  )
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     dispatch(actions.save())
-    onSave()
-  }
+  }, [dispatch])
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     dispatch(actions.cancel())
-    onCancel()
-  }
+  }, [dispatch])
 
   return (
     <Paper>
@@ -64,10 +67,17 @@ export const SelectionPanel = ({
         autoFocus
         onChange={(e) => setSearchQuery(e.target.value)}
       />
+      <Select
+        value={selectedFilter}
+        onChange={(e) => setSelectedFilter(e.target.value as FilterOption)}
+      >
+        <option value="none">All Items</option>
+        <option value="selected">Selected</option>
+      </Select>
       <ElementList
         items={filteredItems}
         selectedIds={selectedIds}
-        maxReached={state.draft.length >= 3}
+        maxReached={state.draft.length >= MAX_SELECTED}
         emptyText="No items found"
         onToggle={handleToggle}
       />

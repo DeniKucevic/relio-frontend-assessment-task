@@ -10,6 +10,12 @@ type State = {
   isPanelOpen: boolean
 }
 
+const initialState: State = {
+  committed: [],
+  draft: [],
+  isPanelOpen: false,
+}
+
 export type Action =
   | { type: 'OPEN_PANEL' }
   | { type: 'TOGGLE_ITEM'; item: Item }
@@ -20,20 +26,14 @@ export type Action =
 
 // Action creators
 export const actions = {
-  /** copies committed into draft */
   openPanel: (): Action => ({ type: 'OPEN_PANEL' }),
-  /** adds/removes item from draft (max 3) */
   toggleItem: (item: Item): Action => ({ type: 'TOGGLE_ITEM', item }),
-  /** removes item from draft by id */
   removeDraft: (id: Item['id']): Action => ({ type: 'REMOVE_DRAFT', id }),
-  /** removes item from committed by id */
   removeCommitted: (id: Item['id']): Action => ({
     type: 'REMOVE_COMMITTED',
     id,
   }),
-  /** copies draft into committed */
   save: (): Action => ({ type: 'SAVE' }),
-  /** restores draft from committed */
   cancel: (): Action => ({ type: 'CANCEL' }),
 }
 
@@ -67,38 +67,38 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 
-type SelectionContextValue = {
-  state: State
-  dispatch: React.Dispatch<Action>
-}
+// We split the state and dispatch into two separate contexts to
+// avoid unnecessary re-renders of components that only need one
+// of them. This is a common optimization technique in React when
+//  using the Context API.
+const SelectionStateContext = createContext<State | null>(null)
+const SelectionDispatchContext = createContext<React.Dispatch<Action> | null>(
+  null,
+)
 
-const SelectionContext = createContext<SelectionContextValue | null>(null)
-
-/**
- * A context provider for managing item selection state.
- * @param param0 The children to wrap with the selection context.
- * @returns The selection context provider.
- */
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    committed: [],
-    draft: [],
-    isPanelOpen: false,
-  })
+  const [state, dispatch] = useReducer(reducer, initialState)
   return (
-    <SelectionContext.Provider value={{ state, dispatch }}>
-      {children}
-    </SelectionContext.Provider>
+    <SelectionStateContext.Provider value={state}>
+      <SelectionDispatchContext.Provider value={dispatch}>
+        {children}
+      </SelectionDispatchContext.Provider>
+    </SelectionStateContext.Provider>
   )
 }
 
-/**
- * A custom hook for accessing the selection context.
- * @returns The selection context value.
- */
-export const useSelection = () => {
-  const ctx = useContext(SelectionContext)
+export const useSelectionState = () => {
+  const ctx = useContext(SelectionStateContext)
   if (!ctx)
-    throw new Error('useSelection must be used within a SelectionProvider')
+    throw new Error('useSelectionState must be used within SelectionProvider')
   return ctx
+}
+
+export const useSelectionDispatch = () => {
+  const dispatch = useContext(SelectionDispatchContext)
+  if (!dispatch)
+    throw new Error(
+      'useSelectionDispatch must be used within SelectionProvider',
+    )
+  return dispatch
 }

@@ -1,25 +1,35 @@
+import { useCallback } from 'react'
+
 import { TagList } from '@/components/tag-list'
-import { actions, useSelection } from '@/context/selection-context'
+import {
+    actions,
+    useSelectionDispatch,
+    useSelectionState,
+} from '@/context/selection-context'
 import { Box, Button, Typography } from '@mui/material'
 
 import { SelectionPanel } from './selection-panel'
 
-const mockItems = [
-  { id: 1, label: 'Item 1' },
-  { id: 2, label: 'Item 2' },
-  { id: 3, label: 'Item 3' },
-]
+import type { Item } from '@/types'
 
-export const WidgetContent = () => {
-  const { dispatch, state } = useSelection()
+type WidgetContentProps = {
+  items: Item[]
+}
 
-  const handleTagRemove = (id: number) => {
-    dispatch(actions.removeCommitted(id))
-  }
+export const WidgetContent = ({ items }: WidgetContentProps) => {
+  const state = useSelectionState()
+  const dispatch = useSelectionDispatch()
 
-  const handleOpenPanel = () => {
+  const handleTagRemove = useCallback(
+    (id: number) => {
+      dispatch(actions.removeCommitted(id))
+    },
+    [dispatch],
+  )
+
+  const handleOpenPanel = useCallback(() => {
     dispatch(actions.openPanel())
-  }
+  }, [dispatch])
 
   return (
     <Box>
@@ -33,13 +43,7 @@ export const WidgetContent = () => {
       <Button variant="contained" color="primary" onClick={handleOpenPanel}>
         Change my choice
       </Button>
-      {state.isPanelOpen ? (
-        <SelectionPanel
-          items={mockItems}
-          onSave={() => null}
-          onCancel={() => null}
-        />
-      ) : null}
+      {state.isPanelOpen ? <SelectionPanel items={items} /> : null}
     </Box>
   )
 }

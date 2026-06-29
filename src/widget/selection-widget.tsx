@@ -2,12 +2,16 @@ import { SelectionProvider } from '@/context/selection-context'
 
 import { WidgetContent } from './widget-content'
 
-type SelectionWidgetProps = {}
+import type { Item } from '@/types'
 
-export const SelectionWidget = ({}: SelectionWidgetProps) => {
+type SelectionWidgetProps = {
+  items: Item[]
+}
+
+export const SelectionWidget = ({ items }: SelectionWidgetProps) => {
   return (
     <SelectionProvider>
-      <WidgetContent />
+      <WidgetContent items={items} />
     </SelectionProvider>
   )
 }
