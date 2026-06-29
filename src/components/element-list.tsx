@@ -1,9 +1,21 @@
+import {
+  Box,
+  Checkbox,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from '@mui/material'
+
 import type { Item } from '@/types'
 
 type ElementListProps = {
   items: Item[]
   selectedIds: Set<number>
   maxReached: boolean
+  emptyText?: string
   onToggle: (item: Item) => void
 }
 
@@ -11,31 +23,42 @@ export const ElementList = ({
   items,
   selectedIds,
   maxReached,
+  emptyText,
   onToggle,
 }: ElementListProps) => {
   if (items.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded bg-gray-200 px-2 py-1">
-        No elements found
-      </div>
+      <Box
+        sx={{
+          height: 260,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography color="text.secondary">
+          {emptyText ?? 'No elements found.'}
+        </Typography>
+      </Box>
     )
   }
+
   return (
-    <div className="flex flex-col gap-2">
+    <List sx={{ height: 260, overflowY: 'auto' }}>
       {items.map((item) => (
-        <div
-          key={item.id}
-          className="flex items-center justify-between rounded bg-gray-200 px-2 py-1"
-        >
-          <span>{item.label}</span>
-          <button
+        <ListItem key={item.id} disablePadding>
+          <ListItemButton
             onClick={() => onToggle(item)}
-            className="rounded bg-blue-500 px-2 py-1 text-white"
+            disabled={!selectedIds.has(item.id) && maxReached}
+            selected={selectedIds.has(item.id)}
           >
-            {selectedIds.has(item.id) ? 'Remove' : 'Add'}
-          </button>
-        </div>
+            <ListItemIcon>
+              <Checkbox checked={selectedIds.has(item.id)} disableRipple />
+            </ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItemButton>
+        </ListItem>
       ))}
-    </div>
+    </List>
   )
 }

@@ -47,16 +47,16 @@
 
 ### `src/components/TagList.tsx`
 
-- [ ] Props: `items: Item[]`, `onRemove: (id: number) => void`
-- [ ] Renders each item as a tag with a × button
-- [ ] No state, no context — pure presentational
+- [x] Props: `items: Item[]`, `onRemove: (id: number) => void`
+- [x] Renders each item as a tag with a × button
+- [x] No state, no context — pure presentational
 
 ### `src/components/ElementList.tsx`
 
-- [ ] Props: `items`, `selectedIds: Set<number>`, `maxReached: boolean`, `onToggle`
-- [ ] Render a plain scrollable list for now (fixed height, overflow-y scroll)
-- [ ] Row: MUI `Checkbox` + label, checked/disabled states
-- [ ] Show "No elements found." when `items` is empty
+- [x] Props: `items`, `selectedIds: Set<number>`, `maxReached: boolean`, `onToggle`
+- [x] Render a plain scrollable list for now (fixed height, overflow-y scroll)
+- [x] Row: MUI `Checkbox` + label, checked/disabled states
+- [x] Show "No elements found." when `items` is empty
 
 ---
 

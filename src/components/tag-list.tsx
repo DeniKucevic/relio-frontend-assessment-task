@@ -1,3 +1,5 @@
+import { Box, Chip } from '@mui/material'
+
 import type { Item } from '@/types'
 
 type TagListProps = {
@@ -7,21 +9,14 @@ type TagListProps = {
 
 export const TagList = ({ items, onRemove }: TagListProps) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
       {items.map((item) => (
-        <div
+        <Chip
           key={item.id}
-          className="flex items-center gap-1 rounded bg-blue-500 px-2 py-1 text-white"
-        >
-          {item.label}
-          <button
-            onClick={() => onRemove(item.id)}
-            className="rounded bg-red-500 px-2 py-1 text-white"
-          >
-            X
-          </button>
-        </div>
+          label={item.label}
+          onDelete={() => onRemove(item.id)}
+        />
       ))}
-    </div>
+    </Box>
   )
 }
