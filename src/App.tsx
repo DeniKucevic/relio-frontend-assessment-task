@@ -1,27 +1,12 @@
-import { SelectionProvider } from './context/selection-context'
-import { SelectionPanel } from './widget/selection-panel'
+import { Paper } from '@mui/material'
 
-//TODO: remove mock data
-
-const mockItems = [
-  { id: 1, label: 'Item 1' },
-  { id: 2, label: 'Item 2' },
-  { id: 3, label: 'Item 3' },
-]
-
-const mockIds = new Set([1, 2])
+import { SelectionWidget } from './widget/selection-widget'
 
 const App = () => {
   return (
-    <div>
-      <SelectionProvider>
-        <SelectionPanel
-          items={mockItems}
-          onSave={() => null}
-          onCancel={() => null}
-        />
-      </SelectionProvider>
-    </div>
+    <Paper>
+      <SelectionWidget />
+    </Paper>
   )
 }
 

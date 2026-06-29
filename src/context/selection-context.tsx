@@ -7,6 +7,7 @@ import type { Item } from '@/types'
 type State = {
   committed: Item[]
   draft: Item[]
+  isPanelOpen: boolean
 }
 
 export type Action =
@@ -39,7 +40,7 @@ export const actions = {
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'OPEN_PANEL':
-      return { ...state, draft: [...state.committed] }
+      return { ...state, draft: [...state.committed], isPanelOpen: true }
     case 'TOGGLE_ITEM': {
       const isSelected = state.draft.some((i) => i.id === action.item.id)
       if (isSelected)
@@ -58,9 +59,9 @@ const reducer = (state: State, action: Action): State => {
         committed: state.committed.filter((i) => i.id !== action.id),
       }
     case 'SAVE':
-      return { ...state, committed: [...state.draft] }
+      return { ...state, committed: [...state.draft], isPanelOpen: false }
     case 'CANCEL':
-      return { ...state, draft: [...state.committed] }
+      return { ...state, draft: [...state.committed], isPanelOpen: false }
     default:
       return state
   }
@@ -79,7 +80,11 @@ const SelectionContext = createContext<SelectionContextValue | null>(null)
  * @returns The selection context provider.
  */
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, { committed: [], draft: [] })
+  const [state, dispatch] = useReducer(reducer, {
+    committed: [],
+    draft: [],
+    isPanelOpen: false,
+  })
   return (
     <SelectionContext.Provider value={{ state, dispatch }}>
       {children}
