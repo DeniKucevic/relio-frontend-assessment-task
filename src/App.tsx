@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
+import { ITEM_COUNT } from '@/config'
+import { SelectionWidget } from '@/widget/selection-widget'
 import { Paper } from '@mui/material'
 
-import { ITEM_COUNT } from './config'
-import type { Item } from './types'
-import { SelectionWidget } from './widget/selection-widget'
+import type { Item } from '@/types'
 
 const App = () => {
   const items: Item[] = useMemo(

@@ -10,7 +10,14 @@ import {
 } from '@/context/selection-context'
 import { useDebounce } from '@/hooks/useDebounce'
 import { applyFilter } from '@/utils/filter-items'
-import { Button, ButtonGroup, Input, Paper, Select } from '@mui/material'
+import {
+    Button,
+    ButtonGroup,
+    Input,
+    MenuItem,
+    Paper,
+    Select,
+} from '@mui/material'
 
 import type { FilterOption, Item } from '@/types'
 
@@ -71,8 +78,10 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
         value={selectedFilter}
         onChange={(e) => setSelectedFilter(e.target.value as FilterOption)}
       >
-        <option value="none">All Items</option>
-        <option value="selected">Selected</option>
+        <MenuItem value="none">No filter</MenuItem>
+        <MenuItem value=">100">&gt;100</MenuItem>
+        <MenuItem value=">2500">&gt;2500</MenuItem>
+        <MenuItem value=">10000">&gt;10000</MenuItem>
       </Select>
       <ElementList
         items={filteredItems}
