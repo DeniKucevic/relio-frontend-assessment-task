@@ -3,4 +3,5 @@ export type Item = {
   label: string
 }
 
-export type FilterOptions = 'none' | '>100' | '>2500' | '>10000'
+// We got this values from task
+export type FilterOption = 'none' | '>100' | '>2500' | '>10000'

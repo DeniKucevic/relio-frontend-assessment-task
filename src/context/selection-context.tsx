@@ -10,7 +10,7 @@ type State = {
 }
 
 type Action =
-  //copies committed into draft
+  // copies committed into draft
   | { type: 'OPEN_PANEL' }
   //adds/removes item from draft (max 3)
   | { type: 'TOGGLE_ITEM'; item: Item }
@@ -60,6 +60,11 @@ type SelectionContextValue = {
 
 const SelectionContext = createContext<SelectionContextValue | null>(null)
 
+/**
+ * A context provider for managing item selection state.
+ * @param param0 The children to wrap with the selection context.
+ * @returns The selection context provider.
+ */
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, { committed: [], draft: [] })
   return (
@@ -69,6 +74,10 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
+/**
+ * A custom hook for accessing the selection context.
+ * @returns The selection context value.
+ */
 export const useSelection = () => {
   const ctx = useContext(SelectionContext)
   if (!ctx)

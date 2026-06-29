@@ -1,5 +1,5 @@
-import { ElementList } from './components/element-list'
-import { TagList } from './components/tag-list'
+import { SelectionProvider } from './context/selection-context'
+import { SelectionPanel } from './widget/selection-panel'
 
 //TODO: remove mock data
 
@@ -9,17 +9,18 @@ const mockItems = [
   { id: 3, label: 'Item 3' },
 ]
 
+const mockIds = new Set([1, 2])
+
 const App = () => {
   return (
     <div>
-      <TagList items={mockItems} onRemove={() => {}} />
-
-      <ElementList
-        items={mockItems}
-        selectedIds={new Set()}
-        maxReached={false}
-        onToggle={() => {}}
-      />
+      <SelectionProvider>
+        <SelectionPanel
+          items={mockItems}
+          onSave={() => null}
+          onCancel={() => null}
+        />
+      </SelectionProvider>
     </div>
   )
 }
