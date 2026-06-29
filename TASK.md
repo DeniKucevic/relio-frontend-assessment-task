@@ -11,8 +11,8 @@
 ---
 
 ## Step 1 — Types (`src/types.ts`)
-- [ ] Define `Item = { id: number; label: string }`
-- [ ] Define `FilterOption = 'none' | '>100' | '>2500' | '>10000'`
+- [x] Define `Item = { id: number; label: string }`
+- [x] Define `FilterOption = 'none' | '>100' | '>2500' | '>10000'`
 
 ---
 
