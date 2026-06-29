@@ -1,8 +1,8 @@
 import { type ReactNode, createContext, useContext, useReducer } from 'react'
 
-import type { Item } from '@/types'
+import { MAX_SELECTED } from '@/config'
 
-const MAX_SELECTED = 3
+import type { Item } from '@/types'
 
 type State = {
   committed: Item[]

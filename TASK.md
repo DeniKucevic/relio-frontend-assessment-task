@@ -38,8 +38,8 @@
 
 ## Step 3 — Hooks (`src/hooks/useDebounce.ts`)
 
-- [ ] `useDebounce<T>(value, delay)` — delays value update by `delay` ms
-- [ ] Use `useEffect` + `setTimeout` + cleanup
+- [x] `useDebounce<T>(value, delay)` — delays value update by `delay` ms
+- [x] Use `useEffect` + `setTimeout` + cleanup
 
 ---
 
