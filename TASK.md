@@ -5,8 +5,8 @@
 - ~~[ ] Install Tailwind: `npm install tailwindcss @tailwindcss/vite`~~ 
 - ~~[ ] Configure Tailwind in `vite.config.ts` and `index.css`~~
 > Note: Drop tailwind, I remember they use MUI
-- [ ] Install MUI: `npm install @mui/material @emotion/react @emotion/styled`
-- [ ] Delete all boilerplate from `App.tsx`, `App.css`, `index.css`
+- [x] Install MUI: `npm install @mui/material @emotion/react @emotion/styled`
+- [x] Delete all boilerplate from `App.tsx`, `App.css`, `index.css`
 
 ---
 
