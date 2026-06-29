@@ -3,20 +3,18 @@ import { useMemo, useState } from 'react'
 import { ElementList } from '@/components/element-list'
 import { TagList } from '@/components/tag-list'
 import { SEARCH_DEBOUNCE_MS } from '@/config'
-import { useSelection } from '@/context/selection-context'
+import { actions, useSelection } from '@/context/selection-context'
 import { useDebounce } from '@/hooks/useDebounce'
 import { applyFilter } from '@/utils/filter-items'
-import { Input } from '@mui/material'
+import { Button, ButtonGroup, Input, Paper } from '@mui/material'
 
-import type { Item } from '@/types'
+import type { FilterOption, Item } from '@/types'
 
 type SelectionPanelProps = {
   items: Item[]
   onSave: () => void
   onCancel: () => void
 }
-
-type FilterOption = 'none'
 
 export const SelectionPanel = ({
   items,
@@ -41,20 +39,43 @@ export const SelectionPanel = ({
     [state.draft],
   )
 
+  const handleToggle = (item: Item) => {
+    dispatch(actions.toggleItem(item))
+  }
+
+  const handleTagRemove = (id: number) => {
+    dispatch(actions.removeDraft(id))
+  }
+
+  const handleSave = () => {
+    dispatch(actions.save())
+    onSave()
+  }
+
+  const handleCancel = () => {
+    dispatch(actions.cancel())
+    onCancel()
+  }
+
   return (
-    <>
+    <Paper>
       <Input
         value={searchQuery}
+        autoFocus
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <ElementList
         items={filteredItems}
         selectedIds={selectedIds}
-        maxReached={false}
+        maxReached={state.draft.length >= 3}
         emptyText="No items found"
-        onToggle={() => null}
+        onToggle={handleToggle}
       />
-      <TagList items={state.draft} onRemove={() => null} />
-    </>
+      <TagList items={state.draft} onRemove={handleTagRemove} />
+      <ButtonGroup>
+        <Button onClick={handleSave}>Save</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
+      </ButtonGroup>
+    </Paper>
   )
 }

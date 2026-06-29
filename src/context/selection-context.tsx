@@ -9,19 +9,32 @@ type State = {
   draft: Item[]
 }
 
-type Action =
-  // copies committed into draft
+export type Action =
   | { type: 'OPEN_PANEL' }
-  //adds/removes item from draft (max 3)
   | { type: 'TOGGLE_ITEM'; item: Item }
-  //removes item from draft by id
-  | { type: 'REMOVE_DRAFT'; id: number }
-  //removes item from committed by id
-  | { type: 'REMOVE_COMMITTED'; id: number }
-  // copies draft into committed
+  | { type: 'REMOVE_DRAFT'; id: Item['id'] }
+  | { type: 'REMOVE_COMMITTED'; id: Item['id'] }
   | { type: 'SAVE' }
-  //restores draft from committed
   | { type: 'CANCEL' }
+
+// Action creators
+export const actions = {
+  /** copies committed into draft */
+  openPanel: (): Action => ({ type: 'OPEN_PANEL' }),
+  /** adds/removes item from draft (max 3) */
+  toggleItem: (item: Item): Action => ({ type: 'TOGGLE_ITEM', item }),
+  /** removes item from draft by id */
+  removeDraft: (id: Item['id']): Action => ({ type: 'REMOVE_DRAFT', id }),
+  /** removes item from committed by id */
+  removeCommitted: (id: Item['id']): Action => ({
+    type: 'REMOVE_COMMITTED',
+    id,
+  }),
+  /** copies draft into committed */
+  save: (): Action => ({ type: 'SAVE' }),
+  /** restores draft from committed */
+  cancel: (): Action => ({ type: 'CANCEL' }),
+}
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {

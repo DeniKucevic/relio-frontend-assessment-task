@@ -64,16 +64,16 @@
 
 ### `src/components/SelectionPanel.tsx`
 
-- [ ] Local state: `search: string`, `filter: FilterOption`
-- [ ] Call `useSelection()` — read `state.draft`, get `dispatch`
-- [ ] `useMemo` for filtered list (apply filter then search)
-- [ ] `useDebounce` on search input (200ms)
-- [ ] `useMemo` for `selectedIds` as `Set<number>`
+- [x] Local state: `search: string`, `filter: FilterOption`
+- [x] Call `useSelection()` — read `state.draft`, get `dispatch`
+- [x] `useMemo` for filtered list (apply filter then search)
+- [x] `useDebounce` on search input (200ms)
+- [x] `useMemo` for `selectedIds` as `Set<number>`
 - [ ] `useEffect` — close on Escape key
 - [ ] `useEffect` — focus panel on mount
 - [ ] `role="dialog"` + `aria-modal="true"` on root div
-- [ ] `autoFocus` on search input
-- [ ] Render `ElementList` + `TagList` (draft) + Save/Cancel buttons
+- [x] `autoFocus` on search input
+- [x] Render `ElementList` + `TagList` (draft) + Save/Cancel buttons
 
 ### `src/SelectionWidget.tsx`
 
