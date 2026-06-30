@@ -1,6 +1,4 @@
-import { PanelProvider } from '@/context/panel-context'
-import { SelectionProvider } from '@/context/selection-context'
-import { ToastProvider } from '@/context/toast-context'
+import { Providers } from '@/providers'
 
 import { WidgetContent } from './widget-content'
 
@@ -12,12 +10,8 @@ type SelectionWidgetProps = {
 
 export const SelectionWidget = ({ items }: SelectionWidgetProps) => {
   return (
-    <SelectionProvider>
-      <PanelProvider>
-        <ToastProvider>
-          <WidgetContent items={items} />
-        </ToastProvider>
-      </PanelProvider>
-    </SelectionProvider>
+    <Providers>
+      <WidgetContent items={items} />
+    </Providers>
   )
 }
