@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 
+import { STRINGS } from '@/shared/strings'
 import {
   Box,
   Checkbox,
@@ -12,7 +13,7 @@ import {
 } from '@mui/material'
 import { useVirtualizer } from '@tanstack/react-virtual'
 
-import type { Item } from '@/types'
+import type { Item } from '@/shared/types'
 
 type ElementListProps = {
   items: Item[]
@@ -48,7 +49,7 @@ export const ElementList = ({
         }}
       >
         <Typography color="text.secondary">
-          {emptyText ?? 'No elements found.'}
+          {emptyText ?? STRINGS.elementList.emptyDefault}
         </Typography>
       </Box>
     )
@@ -73,20 +74,34 @@ export const ElementList = ({
               key={item.id}
               disablePadding
               sx={{
+                height: 48,
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 right: 0,
                 transform: `translateY(${virtualRow.start}px)`,
+                bgcolor:
+                  virtualRow.index % 2 === 0 ? 'transparent' : 'action.hover',
               }}
             >
               <ListItemButton
                 onClick={() => onToggle(item)}
                 disabled={disabled}
                 selected={checked}
+                sx={{
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
               >
                 <ListItemIcon>
-                  <Checkbox checked={checked} disableRipple />
+                  <Checkbox
+                    checked={checked}
+                    disableRipple
+                    slotProps={{
+                      input: {
+                        'aria-label': STRINGS.aria.selectItem(item.label),
+                      },
+                    }}
+                  />
                 </ListItemIcon>
                 <ListItemText primary={item.label} />
               </ListItemButton>

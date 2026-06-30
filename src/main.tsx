@@ -1,9 +1,12 @@
 import { StrictMode } from 'react'
 
 import App from '@/App.tsx'
-import { theme } from '@/theme.ts'
-import { ThemeProvider } from '@emotion/react'
-import { CssBaseline } from '@mui/material'
+import { theme } from '@/shared/theme'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { createRoot } from 'react-dom/client'
 
 import './index.css'

@@ -8,11 +8,12 @@ import {
   useSelectionState,
 } from '@/context/selection-context'
 import { useToast } from '@/context/toast-context'
-import { Box, Button, Typography } from '@mui/material'
+import { STRINGS } from '@/shared/strings'
+import { Button, Card, Typography } from '@mui/material'
 
-import { SelectionPanel } from './selection-panel'
+import { SelectionPanel } from './selection-panel/selection-panel'
 
-import type { Item } from '@/types'
+import type { Item } from '@/shared/types'
 
 type WidgetContentProps = {
   items: Item[]
@@ -27,28 +28,34 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
   const handleTagRemove = useCallback(
     (id: number) => {
       dispatch(actions.removeCommitted(id))
-      showToast('Item removed from selection', 'info')
+      showToast(STRINGS.toast.itemRemoved, 'info')
     },
     [dispatch, showToast],
   )
 
-  const handleOpenPanel = useCallback(() => {
-    panel.open()
-  }, [dispatch])
+  const handleTogglePanel = useCallback(() => {
+    panel.toggle()
+  }, [panel])
 
   return (
-    <Box>
+    <Card variant="outlined" sx={{ p: 2, maxWidth: 600, mx: 'auto' }}>
       <Typography variant="h6" gutterBottom>
-        Select items
+        {STRINGS.widget.title}
       </Typography>
       <Typography variant="body1" gutterBottom>
-        You currently have {state.committed.length} items selected.
+        {STRINGS.widget.selectedCount(state.committed.length)}
       </Typography>
-      <TagList items={state.committed} onRemove={handleTagRemove} />
-      <Button variant="contained" color="primary" onClick={handleOpenPanel}>
-        Change my choice
+      {state.committed.length > 0 ? (
+        <TagList items={state.committed} onRemove={handleTagRemove} />
+      ) : (
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          {STRINGS.widget.noItemsSelected}
+        </Typography>
+      )}
+      <Button variant="contained" color="primary" onClick={handleTogglePanel}>
+        {STRINGS.widget.changeChoice}
       </Button>
       {panel.isOpen ? <SelectionPanel items={items} /> : null}
-    </Box>
+    </Card>
   )
 }

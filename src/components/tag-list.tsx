@@ -1,6 +1,7 @@
+import { STRINGS } from '@/shared/strings'
 import { Box, Chip } from '@mui/material'
 
-import type { Item } from '@/types'
+import type { Item } from '@/shared/types'
 
 type TagListProps = {
   items: Item[]
@@ -14,6 +15,10 @@ export const TagList = ({ items, onRemove }: TagListProps) => {
         <Chip
           key={item.id}
           label={item.label}
+          color="primary"
+          variant="outlined"
+          size="small"
+          aria-label={STRINGS.aria.removeItem(item.label)}
           onDelete={() => onRemove(item.id)}
         />
       ))}

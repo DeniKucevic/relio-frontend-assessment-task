@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
-import { ITEM_COUNT } from '@/config'
+import { ITEM_COUNT } from '@/shared/config'
 import { SelectionWidget } from '@/widget/selection-widget'
-import { Paper } from '@mui/material'
+import { Box } from '@mui/material'
 
-import type { Item } from '@/types'
+import type { Item } from '@/shared/types'
 
 const App = () => {
   const items: Item[] = useMemo(
@@ -17,9 +17,9 @@ const App = () => {
   )
 
   return (
-    <Paper>
+    <Box>
       <SelectionWidget items={items} />
-    </Paper>
+    </Box>
   )
 }
 

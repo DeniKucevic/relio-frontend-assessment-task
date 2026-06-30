@@ -1,0 +1,133 @@
+import { useMemo, useState } from 'react'
+
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { ElementList } from '@/components/element-list'
+import { usePanel } from '@/context/panel-context'
+import {
+  actions,
+  useSelectionDispatch,
+  useSelectionState,
+} from '@/context/selection-context'
+import { useToast } from '@/context/toast-context'
+import { useItemSearch } from '@/hooks/useItemSeach'
+import { MAX_SELECTED } from '@/shared/config'
+import { STRINGS } from '@/shared/strings'
+import CloseIcon from '@mui/icons-material/Close'
+import { Box, IconButton, Paper, Typography } from '@mui/material'
+
+import { PanelFooter } from './panel-footer'
+import { PanelToolbar } from './panel-toolbar'
+
+import type { Item } from '@/shared/types'
+
+type SelectionPanelProps = { items: Item[] }
+
+export const SelectionPanel = ({ items }: SelectionPanelProps) => {
+  const state = useSelectionState()
+  const dispatch = useSelectionDispatch()
+  const panel = usePanel()
+  const { showToast } = useToast()
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedFilter,
+    setSelectedFilter,
+    filteredItems,
+  } = useItemSearch(items)
+
+  const hasPendingChanges = useMemo(() => {
+    if (state.draft.length !== state.committed.length) return true
+    const committedIds = new Set(state.committed.map((i) => i.id))
+    return state.draft.some((i) => !committedIds.has(i.id))
+  }, [state.draft, state.committed])
+
+  const selectedIds = useMemo(
+    () => new Set(state.draft.map((i) => i.id)),
+    [state.draft],
+  )
+
+  const handleSave = () => {
+    dispatch(actions.save())
+    panel.close()
+    showToast(STRINGS.toast.saved)
+  }
+
+  const handleCancel = () => {
+    if (hasPendingChanges) {
+      setConfirmOpen(true)
+    } else {
+      dispatch(actions.cancel())
+      panel.close()
+      showToast(STRINGS.toast.cancelled, 'info')
+    }
+  }
+
+  const handleDiscard = () => {
+    dispatch(actions.cancel())
+    panel.close()
+    setConfirmOpen(false)
+    showToast(STRINGS.toast.discarded, 'info')
+  }
+
+  return (
+    <Paper
+      variant="outlined"
+      role="dialog"
+      aria-modal="true"
+      aria-label={STRINGS.aria.panelLabel}
+      sx={{ mt: 2 }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          p: 2,
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          {STRINGS.panel.title}
+        </Typography>
+        <IconButton
+          size="small"
+          onClick={panel.close}
+          aria-label={STRINGS.aria.closePanel}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </Box>
+      <PanelToolbar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        selectedFilter={selectedFilter}
+        onFilterChange={setSelectedFilter}
+      />
+      <ElementList
+        items={filteredItems}
+        selectedIds={selectedIds}
+        maxReached={state.draft.length >= MAX_SELECTED}
+        emptyText={STRINGS.panel.noItemsFound}
+        onToggle={(item) => dispatch(actions.toggleItem(item))}
+      />
+      <PanelFooter
+        draftItems={state.draft}
+        onRemoveDraft={(id) => dispatch(actions.removeDraft(id))}
+        onSave={handleSave}
+        onCancel={handleCancel}
+      />
+      <ConfirmDialog
+        open={confirmOpen}
+        title={STRINGS.confirm.title}
+        message={STRINGS.confirm.message}
+        confirmLabel={STRINGS.confirm.confirmLabel}
+        cancelLabel={STRINGS.confirm.cancelLabel}
+        onConfirm={handleDiscard}
+        onCancel={() => setConfirmOpen(false)}
+      />
+    </Paper>
+  )
+}

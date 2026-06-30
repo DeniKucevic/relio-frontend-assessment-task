@@ -1,11 +1,6 @@
-import type { FilterOption, Item } from '@/types'
+import { FILTER_OPTIONS } from '@/shared/config'
 
-const FILTER_PREDICATES: Record<FilterOption, (item: Item) => boolean> = {
-  none: () => true,
-  '>100': (item) => item.id > 100,
-  '>2500': (item) => item.id > 2500,
-  '>10000': (item) => item.id > 10000,
-}
+import type { FilterOption, Item } from '@/shared/types'
 
 /**
  * Applies a filter to an array of items based on the specified filter option.
@@ -14,6 +9,6 @@ const FILTER_PREDICATES: Record<FilterOption, (item: Item) => boolean> = {
  * @returns The filtered array of items.
  */
 export const applyFilter = (items: Item[], filter: FilterOption): Item[] => {
-  const predicate = FILTER_PREDICATES[filter]
-  return items.filter(predicate)
+  const option = FILTER_OPTIONS.find((o) => o.value === filter)!
+  return items.filter(option.predicate)
 }

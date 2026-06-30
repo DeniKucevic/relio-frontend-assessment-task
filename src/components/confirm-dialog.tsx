@@ -1,3 +1,4 @@
+import { STRINGS } from '@/shared/strings'
 import {
     Button,
     Dialog,
@@ -27,14 +28,14 @@ export const ConfirmDialog = ({
   onCancel,
 }: ConfirmDialogProps) => (
   <Dialog open={open} onClose={onCancel}>
-    <DialogTitle>{title}</DialogTitle>
+    <DialogTitle>{STRINGS.confirm.title}</DialogTitle>
     <DialogContent>
       <DialogContentText>{message}</DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button onClick={onCancel}>{cancelLabel}</Button>
+      <Button onClick={onCancel}>{STRINGS.confirm.cancelLabel}</Button>
       <Button onClick={onConfirm} color="error">
-        {confirmLabel}
+        {STRINGS.confirm.confirmLabel}
       </Button>
     </DialogActions>
   </Dialog>
