@@ -18,7 +18,7 @@ export const PanelFooter = ({
   onCancel,
 }: PanelFooterProps) => (
   <>
-    <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+    <Box sx={{ flexShrink: 0, p: 2, borderTop: 1, borderColor: 'divider' }}>
       <Box
         sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1 }}
       >
@@ -35,7 +35,7 @@ export const PanelFooter = ({
     <Stack
       direction="row"
       spacing={2}
-      sx={{ p: 2, justifyContent: 'flex-end' }}
+      sx={{ flexShrink: 0, p: 2, justifyContent: 'flex-end' }}
     >
       <Button variant="contained" color="primary" onClick={onSave}>
         {STRINGS.panel.save}

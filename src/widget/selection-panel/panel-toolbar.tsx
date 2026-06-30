@@ -27,6 +27,7 @@ export const PanelToolbar = ({
 }: PanelToolbarProps) => (
   <Box
     sx={{
+      flexShrink: 0,
       display: 'flex',
       gap: 2,
       alignItems: 'center',

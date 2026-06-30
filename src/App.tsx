@@ -21,7 +21,10 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
-      <Box sx={{ minHeight: PAGE_MIN_HEIGHT, py: PAGE_VERTICAL_PADDING }}>
+      <Box
+        component="main"
+        sx={{ minHeight: PAGE_MIN_HEIGHT, py: PAGE_VERTICAL_PADDING }}
+      >
         <SelectionWidget items={items} />
       </Box>
     </ErrorBoundary>

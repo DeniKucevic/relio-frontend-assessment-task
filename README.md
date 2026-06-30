@@ -2,6 +2,8 @@
 
 A widget for selecting up to 3 elements from a large list, with search, filtering, and a virtualized scrollable list. Built for Relio's frontend assignment.
 
+![Selection widget screenshot](docs/screenshot.png)
+
 **Live demo:** _[add deployed URL here]_
 
 ## Tech stack
@@ -76,9 +78,10 @@ src/
 ## Beyond the spec
 
 A few additions beyond the literal requirements, included as polish:
+
 - Toast notifications on save/cancel/discard/remove
 - Confirm-discard dialog when closing with unsaved changes
-- Open/close animation (`Collapse`)
+- Open/close animation (`Fade`)
 - Accessibility: dialog semantics, labeled form controls, ARIA labels on icon-only controls
 - Error boundary around the widget
 

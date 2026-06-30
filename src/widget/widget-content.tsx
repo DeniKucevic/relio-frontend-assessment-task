@@ -10,7 +10,7 @@ import {
 import { useToast } from '@/context/toast-context'
 import { WIDGET_MAX_WIDTH } from '@/shared/sizing'
 import { STRINGS } from '@/shared/strings'
-import { Box, Button, Card, Collapse, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, Fade, Stack, Typography } from '@mui/material'
 
 import { SelectionPanel } from './selection-panel'
 
@@ -44,9 +44,17 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
   return (
     <Card
       variant="outlined"
-      sx={{ p: 2, maxWidth: WIDGET_MAX_WIDTH, mx: 'auto' }}
+      sx={{
+        p: 2,
+        maxWidth: WIDGET_MAX_WIDTH,
+        mx: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: { xs: '95vh', sm: 'none' },
+        overflow: 'hidden',
+      }}
     >
-      <Stack spacing={2}>
+      <Stack spacing={2} sx={{ flexShrink: 0 }}>
         <Box>
           <Typography variant="h6" gutterBottom>
             {STRINGS.widget.title}
@@ -71,9 +79,9 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
           {STRINGS.widget.changeChoice}
         </Button>
       </Stack>
-      <Collapse in={panel.isOpen} unmountOnExit>
+      <Fade in={panel.isOpen} unmountOnExit>
         <SelectionPanel items={items} />
-      </Collapse>
+      </Fade>
     </Card>
   )
 }

@@ -59,7 +59,12 @@ export const ElementList = ({
   return (
     <Box
       ref={parentRef}
-      sx={{ height: LIST_VIEWPORT_HEIGHT, overflowY: 'auto' }}
+      sx={{
+        flex: 1,
+        minHeight: 0,
+        maxHeight: LIST_VIEWPORT_HEIGHT,
+        overflowY: 'auto',
+      }}
     >
       <List
         sx={{

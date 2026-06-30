@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { ElementList } from '@/components/element-list'
@@ -23,109 +23,119 @@ import type { Item } from '@/shared/types'
 
 type SelectionPanelProps = { items: Item[] }
 
-export const SelectionPanel = ({ items }: SelectionPanelProps) => {
-  const state = useSelectionState()
-  const dispatch = useSelectionDispatch()
-  const panel = usePanel()
-  const { showToast } = useToast()
-  const [confirmOpen, setConfirmOpen] = useState(false)
+export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
+  ({ items }, ref) => {
+    const state = useSelectionState()
+    const dispatch = useSelectionDispatch()
+    const panel = usePanel()
+    const { showToast } = useToast()
+    const [confirmOpen, setConfirmOpen] = useState(false)
 
-  const {
-    searchQuery,
-    setSearchQuery,
-    selectedFilter,
-    setSelectedFilter,
-    filteredItems,
-  } = useItemSearch(items)
+    const {
+      searchQuery,
+      setSearchQuery,
+      selectedFilter,
+      setSelectedFilter,
+      filteredItems,
+    } = useItemSearch(items)
 
-  const selectedIds = useMemo(
-    () => new Set(state.draft.map((i) => i.id)),
-    [state.draft],
-  )
+    const selectedIds = useMemo(
+      () => new Set(state.draft.map((i) => i.id)),
+      [state.draft],
+    )
 
-  const handleSave = () => {
-    dispatch(actions.save())
-    panel.close()
-    showToast(STRINGS.toast.saved)
-  }
+    const handleSave = () => {
+      dispatch(actions.save())
+      panel.close()
+      showToast(STRINGS.toast.saved)
+    }
 
-  const handleCancel = () => {
-    if (hasPendingChanges(state.draft, state.committed)) {
-      setConfirmOpen(true)
-    } else {
+    const handleCancel = () => {
+      if (hasPendingChanges(state.draft, state.committed)) {
+        setConfirmOpen(true)
+      } else {
+        dispatch(actions.cancel())
+        panel.close()
+        showToast(STRINGS.toast.cancelled, 'info')
+      }
+    }
+
+    const handleDiscard = () => {
       dispatch(actions.cancel())
       panel.close()
-      showToast(STRINGS.toast.cancelled, 'info')
+      setConfirmOpen(false)
+      showToast(STRINGS.toast.discarded, 'info')
     }
-  }
 
-  const handleDiscard = () => {
-    dispatch(actions.cancel())
-    panel.close()
-    setConfirmOpen(false)
-    showToast(STRINGS.toast.discarded, 'info')
-  }
-
-  return (
-    <Paper
-      variant="outlined"
-      role="dialog"
-      aria-modal="true"
-      aria-label={STRINGS.aria.panelLabel}
-      sx={{ mt: 2 }}
-    >
-      <Box
+    return (
+      <Paper
+        ref={ref}
+        variant="outlined"
+        role="dialog"
+        aria-modal="true"
+        aria-label={STRINGS.aria.panelLabel}
         sx={{
+          mt: 2,
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          p: 2,
-          bgcolor: 'background.default',
-          borderBottom: 1,
-          borderColor: 'divider',
-          borderTopLeftRadius: 'inherit',
-          borderTopRightRadius: 'inherit',
+          flexDirection: 'column',
+          flex: 1,
+          minHeight: 0,
+          overflow: 'hidden',
         }}
       >
-        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-          {STRINGS.panel.title}
-        </Typography>
-        <IconButton
-          size="small"
-          onClick={handleCancel}
-          aria-label={STRINGS.aria.closePanel}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            p: 2,
+            bgcolor: 'background.default',
+            borderBottom: 1,
+            borderColor: 'divider',
+            borderTopLeftRadius: 'inherit',
+            borderTopRightRadius: 'inherit',
+          }}
         >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </Box>
-      <PanelToolbar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        selectedFilter={selectedFilter}
-        onFilterChange={setSelectedFilter}
-      />
-      <ElementList
-        items={filteredItems}
-        selectedIds={selectedIds}
-        maxReached={state.draft.length >= MAX_SELECTED}
-        emptyText={STRINGS.panel.noItemsFound}
-        onToggle={(item) => dispatch(actions.toggleItem(item))}
-      />
-      <PanelFooter
-        draftItems={state.draft}
-        onRemoveDraft={(id) => dispatch(actions.removeDraft(id))}
-        onSave={handleSave}
-        onCancel={handleCancel}
-      />
-      <ConfirmDialog
-        open={confirmOpen}
-        title={STRINGS.confirm.title}
-        message={STRINGS.confirm.message}
-        confirmLabel={STRINGS.confirm.confirmLabel}
-        cancelLabel={STRINGS.confirm.cancelLabel}
-        onConfirm={handleDiscard}
-        onCancel={() => setConfirmOpen(false)}
-      />
-    </Paper>
-  )
-}
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+            {STRINGS.panel.title}
+          </Typography>
+          <IconButton
+            size="small"
+            onClick={handleCancel}
+            aria-label={STRINGS.aria.closePanel}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </Box>
+        <PanelToolbar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          selectedFilter={selectedFilter}
+          onFilterChange={setSelectedFilter}
+        />
+        <ElementList
+          items={filteredItems}
+          selectedIds={selectedIds}
+          maxReached={state.draft.length >= MAX_SELECTED}
+          emptyText={STRINGS.panel.noItemsFound}
+          onToggle={(item) => dispatch(actions.toggleItem(item))}
+        />
+        <PanelFooter
+          draftItems={state.draft}
+          onRemoveDraft={(id) => dispatch(actions.removeDraft(id))}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+        <ConfirmDialog
+          open={confirmOpen}
+          title={STRINGS.confirm.title}
+          message={STRINGS.confirm.message}
+          confirmLabel={STRINGS.confirm.confirmLabel}
+          cancelLabel={STRINGS.confirm.cancelLabel}
+          onConfirm={handleDiscard}
+          onCancel={() => setConfirmOpen(false)}
+        />
+      </Paper>
+    )
+  },
+)
