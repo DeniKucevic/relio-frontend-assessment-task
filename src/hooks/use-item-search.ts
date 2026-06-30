@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { SEARCH_DEBOUNCE_MS } from '@/shared/config'
 import { applyFilter } from '@/utils/filter-items'
 
-import { useDebounce } from './useDebounce'
+import { useDebounce } from './use-debounce'
 
 import type { FilterOption, Item } from '@/shared/types'
 

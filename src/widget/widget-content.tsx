@@ -11,7 +11,7 @@ import { useToast } from '@/context/toast-context'
 import { STRINGS } from '@/shared/strings'
 import { Button, Card, Typography } from '@mui/material'
 
-import { SelectionPanel } from './selection-panel/selection-panel'
+import { SelectionPanel } from './selection-panel'
 
 import type { Item } from '@/shared/types'
 

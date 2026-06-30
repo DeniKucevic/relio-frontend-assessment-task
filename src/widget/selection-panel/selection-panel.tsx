@@ -9,7 +9,7 @@ import {
   useSelectionState,
 } from '@/context/selection-context'
 import { useToast } from '@/context/toast-context'
-import { useItemSearch } from '@/hooks/useItemSeach'
+import { useItemSearch } from '@/hooks/use-item-search'
 import { MAX_SELECTED } from '@/shared/config'
 import { STRINGS } from '@/shared/strings'
 import CloseIcon from '@mui/icons-material/Close'
