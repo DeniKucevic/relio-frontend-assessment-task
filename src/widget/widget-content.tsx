@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import { TagList } from '@/components/tag-list'
 import { usePanel } from '@/context/panel-context'
 import {
@@ -26,20 +24,17 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
   const panel = usePanel()
   const { showToast } = useToast()
 
-  const handleTagRemove = useCallback(
-    (id: number) => {
-      dispatch(actions.removeCommitted(id))
-      showToast(STRINGS.toast.itemRemoved, 'info')
-    },
-    [dispatch, showToast],
-  )
+  const handleTagRemove = (id: number) => {
+    dispatch(actions.removeCommitted(id))
+    showToast(STRINGS.toast.itemRemoved, 'info')
+  }
 
-  const handleTogglePanel = useCallback(() => {
+  const handleTogglePanel = () => {
     if (!panel.isOpen) {
       dispatch(actions.syncDraft())
     }
     panel.toggle()
-  }, [panel])
+  }
 
   return (
     <Card

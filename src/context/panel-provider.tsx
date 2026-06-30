@@ -1,19 +1,6 @@
-import {
-    type ReactNode,
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-} from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
-type PanelContextValue = {
-  isOpen: boolean
-  open: () => void
-  close: () => void
-  toggle: () => void
-}
-
-const PanelContext = createContext<PanelContextValue | null>(null)
+import { PanelContext } from './panel-context'
 
 export const PanelProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -35,10 +22,4 @@ export const PanelProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </PanelContext.Provider>
   )
-}
-
-export const usePanel = () => {
-  const ctx = useContext(PanelContext)
-  if (!ctx) throw new Error('usePanel must be used within PanelProvider')
-  return ctx
 }

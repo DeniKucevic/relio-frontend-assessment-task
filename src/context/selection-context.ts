@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useContext, useReducer } from 'react'
+import { createContext, useContext } from 'react'
 
 import { MAX_SELECTED } from '@/shared/config'
 
@@ -49,14 +49,11 @@ export const reducer = (state: State, action: Action): State => {
     }
     case 'REMOVE_DRAFT':
       return { ...state, draft: state.draft.filter((i) => i.id !== action.id) }
-    case 'REMOVE_COMMITTED':
+    case 'REMOVE_COMMITTED': {
       const committed = state.committed.filter((i) => i.id !== action.id)
       const draft = state.draft.filter((i) => i.id !== action.id)
-      return {
-        ...state,
-        committed,
-        draft,
-      }
+      return { ...state, committed, draft }
+    }
     case 'SAVE':
       return { ...state, committed: [...state.draft] }
     case 'CANCEL':
@@ -71,22 +68,10 @@ export const reducer = (state: State, action: Action): State => {
 // We split the state and dispatch into two separate contexts to
 // avoid unnecessary re-renders of components that only need one
 // of them. This is a common optimization technique in React when
-//  using the Context API.
-const SelectionStateContext = createContext<State | null>(null)
-const SelectionDispatchContext = createContext<React.Dispatch<Action> | null>(
-  null,
-)
-
-export const SelectionProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  return (
-    <SelectionStateContext.Provider value={state}>
-      <SelectionDispatchContext.Provider value={dispatch}>
-        {children}
-      </SelectionDispatchContext.Provider>
-    </SelectionStateContext.Provider>
-  )
-}
+// using the Context API.
+export const SelectionStateContext = createContext<State | null>(null)
+export const SelectionDispatchContext =
+  createContext<React.Dispatch<Action> | null>(null)
 
 export const useSelectionState = () => {
   const ctx = useContext(SelectionStateContext)
