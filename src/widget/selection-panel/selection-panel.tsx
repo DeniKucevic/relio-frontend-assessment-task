@@ -12,6 +12,7 @@ import { useToast } from '@/context/toast-context'
 import { useItemSearch } from '@/hooks/use-item-search'
 import { MAX_SELECTED } from '@/shared/config'
 import { STRINGS } from '@/shared/strings'
+import { hasPendingChanges } from '@/utils/has-pending-changes'
 import CloseIcon from '@mui/icons-material/Close'
 import { Box, IconButton, Paper, Typography } from '@mui/material'
 
@@ -37,12 +38,6 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
     filteredItems,
   } = useItemSearch(items)
 
-  const hasPendingChanges = useMemo(() => {
-    if (state.draft.length !== state.committed.length) return true
-    const committedIds = new Set(state.committed.map((i) => i.id))
-    return state.draft.some((i) => !committedIds.has(i.id))
-  }, [state.draft, state.committed])
-
   const selectedIds = useMemo(
     () => new Set(state.draft.map((i) => i.id)),
     [state.draft],
@@ -55,7 +50,7 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
   }
 
   const handleCancel = () => {
-    if (hasPendingChanges) {
+    if (hasPendingChanges(state.draft, state.committed)) {
       setConfirmOpen(true)
     } else {
       dispatch(actions.cancel())
@@ -94,7 +89,7 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
         </Typography>
         <IconButton
           size="small"
-          onClick={panel.close}
+          onClick={handleCancel}
           aria-label={STRINGS.aria.closePanel}
         >
           <CloseIcon fontSize="small" />

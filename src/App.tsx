@@ -17,7 +17,7 @@ const App = () => {
   )
 
   return (
-    <Box>
+    <Box sx={{ minHeight: '100vh', py: 6 }}>
       <SelectionWidget items={items} />
     </Box>
   )

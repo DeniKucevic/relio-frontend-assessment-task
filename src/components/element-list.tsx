@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 
+import { LIST_ROW_HEIGHT, LIST_VIEWPORT_HEIGHT } from '@/shared/sizing'
 import { STRINGS } from '@/shared/strings'
 import {
   Box,
@@ -35,14 +36,14 @@ export const ElementList = ({
   const virtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 48, // MUI ListItem default height
+    estimateSize: () => LIST_ROW_HEIGHT,
   })
 
   if (items.length === 0) {
     return (
       <Box
         sx={{
-          height: 260,
+          height: LIST_VIEWPORT_HEIGHT,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -56,7 +57,10 @@ export const ElementList = ({
   }
 
   return (
-    <Box ref={parentRef} sx={{ height: 260, overflowY: 'auto' }}>
+    <Box
+      ref={parentRef}
+      sx={{ height: LIST_VIEWPORT_HEIGHT, overflowY: 'auto' }}
+    >
       <List
         sx={{
           height: virtualizer.getTotalSize(),
@@ -74,7 +78,7 @@ export const ElementList = ({
               key={item.id}
               disablePadding
               sx={{
-                height: 48,
+                height: LIST_ROW_HEIGHT,
                 position: 'absolute',
                 top: 0,
                 left: 0,

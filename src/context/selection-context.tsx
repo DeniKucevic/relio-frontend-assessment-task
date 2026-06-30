@@ -20,6 +20,7 @@ export type Action =
   | { type: 'REMOVE_COMMITTED'; id: Item['id'] }
   | { type: 'SAVE' }
   | { type: 'CANCEL' }
+  | { type: 'SYNC_DRAFT' }
 
 // Action creators
 export const actions = {
@@ -31,6 +32,7 @@ export const actions = {
   }),
   save: (): Action => ({ type: 'SAVE' }),
   cancel: (): Action => ({ type: 'CANCEL' }),
+  syncDraft: (): Action => ({ type: 'SYNC_DRAFT' }),
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -55,6 +57,8 @@ export const reducer = (state: State, action: Action): State => {
     case 'SAVE':
       return { ...state, committed: [...state.draft] }
     case 'CANCEL':
+      return { ...state, draft: [...state.committed] }
+    case 'SYNC_DRAFT':
       return { ...state, draft: [...state.committed] }
     default:
       return state

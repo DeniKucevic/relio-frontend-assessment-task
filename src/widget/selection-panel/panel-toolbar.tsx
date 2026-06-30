@@ -1,12 +1,13 @@
 import { FILTER_OPTIONS } from '@/shared/config'
+import { FILTER_SELECT_MIN_WIDTH } from '@/shared/sizing'
 import { STRINGS } from '@/shared/strings'
 import {
-    Box,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
 } from '@mui/material'
 
 import type { FilterOption } from '@/shared/types'
@@ -44,7 +45,10 @@ export const PanelToolbar = ({
       sx={{ flexGrow: 1 }}
       onChange={(e) => onSearchChange(e.target.value)}
     />
-    <FormControl size="small" sx={{ minWidth: 160, flexShrink: 0 }}>
+    <FormControl
+      size="small"
+      sx={{ minWidth: FILTER_SELECT_MIN_WIDTH, flexShrink: 0 }}
+    >
       <InputLabel>{STRINGS.panel.filterLabel}</InputLabel>
       <Select
         label={STRINGS.panel.filterLabel}
