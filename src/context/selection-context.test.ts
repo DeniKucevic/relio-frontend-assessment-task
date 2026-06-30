@@ -48,4 +48,11 @@ describe('selection reducer', () => {
     const result = reducer(state, actions.removeCommitted(item1.id))
     expect(result.committed).toEqual([item2])
   })
+
+  it('REMOVE_COMMITTED also removes the item from draft if present', () => {
+    const state = { committed: [item1, item2], draft: [item1, item2] }
+    const result = reducer(state, actions.removeCommitted(item1.id))
+    expect(result.committed).toEqual([item2])
+    expect(result.draft).toEqual([item2])
+  })
 })

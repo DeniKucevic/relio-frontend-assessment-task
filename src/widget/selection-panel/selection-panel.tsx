@@ -80,8 +80,11 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           p: 2,
+          bgcolor: 'background.default',
           borderBottom: 1,
           borderColor: 'divider',
+          borderTopLeftRadius: 'inherit',
+          borderTopRightRadius: 'inherit',
         }}
       >
         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>

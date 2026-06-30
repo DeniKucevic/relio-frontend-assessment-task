@@ -19,10 +19,18 @@ export const PanelFooter = ({
 }: PanelFooterProps) => (
   <>
     <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
-      <Typography variant="body2" color="text.secondary" gutterBottom>
-        {STRINGS.panel.currentSelected}
-      </Typography>
-      <TagList items={draftItems} onRemove={onRemoveDraft} />
+      <Box
+        sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1 }}
+      >
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ whiteSpace: 'nowrap' }}
+        >
+          {STRINGS.panel.currentSelected}
+        </Typography>
+        <TagList items={draftItems} onRemove={onRemoveDraft} />
+      </Box>
     </Box>
     <Stack
       direction="row"

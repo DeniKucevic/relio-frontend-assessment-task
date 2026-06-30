@@ -50,9 +50,12 @@ export const reducer = (state: State, action: Action): State => {
     case 'REMOVE_DRAFT':
       return { ...state, draft: state.draft.filter((i) => i.id !== action.id) }
     case 'REMOVE_COMMITTED':
+      const committed = state.committed.filter((i) => i.id !== action.id)
+      const draft = state.draft.filter((i) => i.id !== action.id)
       return {
         ...state,
-        committed: state.committed.filter((i) => i.id !== action.id),
+        committed,
+        draft,
       }
     case 'SAVE':
       return { ...state, committed: [...state.draft] }

@@ -1,11 +1,11 @@
 import { STRINGS } from '@/shared/strings'
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material'
 
 type ConfirmDialogProps = {
@@ -20,10 +20,7 @@ type ConfirmDialogProps = {
 
 export const ConfirmDialog = ({
   open,
-  title,
   message,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) => (

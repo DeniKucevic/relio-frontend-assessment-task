@@ -7,6 +7,12 @@ import { useDebounce } from './use-debounce'
 
 import type { FilterOption, Item } from '@/shared/types'
 
+/**
+ * Custom hook for searching and filtering items.
+ *
+ * @param items - The list of items to search and filter.
+ * @returns An object containing the search query, selected filter, filtered items, and setter functions.
+ */
 export function useItemSearch(items: Item[]) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none')
