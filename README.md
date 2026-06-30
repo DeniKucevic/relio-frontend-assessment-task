@@ -1,10 +1,12 @@
 # Selection Widget | Relio Frontend Assignment
 
+![CI](https://github.com/DeniKucevic/relio-frontend-assessment-task/actions/workflows/ci.yml/badge.svg)
+
 A widget for selecting up to 3 elements from a large list, with search, filtering, and a virtualized scrollable list. Built for Relio's frontend assignment.
 
 ![Selection widget screenshot](docs/screenshot.png)
 
-**Live demo:** _[add deployed URL here]_
+**Live demo:** [LIVE DEMO](https://relio-frontend-assessment-task.vercel.app/)
 
 ## Tech stack
 
@@ -28,7 +30,7 @@ npm run build     # production build
 
 ### State management: Context + `useReducer`
 
-Selection state (`committed` vs `draft` items) lives in `context/selection-context.tsx`, managed with `useReducer` rather than multiple `useState` calls. The selection logic has several coordinated transitions (toggle with a max-3 cap, save copies draft → committed, cancel restores draft from committed), a reducer keeps all of that in one pure, testable function rather than scattered setters.
+Selection state (`committed` vs `draft` items) lives in `context/selection-context.ts`, managed with `useReducer` rather than multiple `useState` calls. The selection logic has several coordinated transitions (toggle with a max-3 cap, save copies draft → committed, cancel restores draft from committed), a reducer keeps all of that in one pure, testable function rather than scattered setters.
 
 The widget owns its own `<SelectionProvider>` internally (see `widget/selection-widget.tsx`) rather than requiring the consumer to wrap it. This keeps the widget genuinely self-contained and drop-in reusable.
 
@@ -57,7 +59,13 @@ Layout dimensions (`shared/sizing.ts`) and all user-facing strings (`shared/stri
 ```
 src/
   shared/              design tokens: config, sizing, strings, theme, types
-  context/             SelectionContext, PanelContext, ToastContext
+  context/
+   selection-context.ts      reducer, actions, hooks
+   selection-provider.tsx    SelectionProvider
+   panel-context.ts          usePanel hook
+   panel-provider.tsx        PanelProvider
+   toast-context.ts          useToast hook
+   toast-provider.tsx        ToastProvider
   hooks/                useDebounce, useItemSearch
   components/          reusable, presentation-only: TagList, ElementList, ConfirmDialog, ErrorBoundary
   widget/
@@ -73,7 +81,7 @@ src/
 
 ## Testing
 
-19 tests across reducer logic, pure utilities, a custom hook, and one integration test covering the trickiest behavioral bug found during development (selection state staying in sync when the panel is closed and reopened without saving). Run with `npm run test`.
+20 tests across reducer logic, pure utilities, a custom hook, and one integration test covering the trickiest behavioral bug found during development (selection state staying in sync when the panel is closed and reopened without saving). Run with `npm run test`.
 
 ## Beyond the spec
 

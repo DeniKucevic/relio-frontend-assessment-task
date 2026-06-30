@@ -35,18 +35,17 @@ export const actions = {
   syncDraft: (): Action => ({ type: 'SYNC_DRAFT' }),
 }
 
+const toggleItemInDraft = (draft: Item[], item: Item): Item[] => {
+  const isSelected = draft.some((i) => i.id === item.id)
+  if (isSelected) return draft.filter((i) => i.id !== item.id)
+  if (draft.length >= MAX_SELECTED) return draft
+  return [...draft, item]
+}
+
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'TOGGLE_ITEM': {
-      const isSelected = state.draft.some((i) => i.id === action.item.id)
-      if (isSelected)
-        return {
-          ...state,
-          draft: state.draft.filter((i) => i.id !== action.item.id),
-        }
-      if (state.draft.length >= MAX_SELECTED) return state
-      return { ...state, draft: [...state.draft, action.item] }
-    }
+    case 'TOGGLE_ITEM':
+      return { ...state, draft: toggleItemInDraft(state.draft, action.item) }
     case 'REMOVE_DRAFT':
       return { ...state, draft: state.draft.filter((i) => i.id !== action.id) }
     case 'REMOVE_COMMITTED': {
@@ -57,9 +56,13 @@ export const reducer = (state: State, action: Action): State => {
     case 'SAVE':
       return { ...state, committed: [...state.draft] }
     case 'CANCEL':
-      return { ...state, draft: [...state.committed] }
     case 'SYNC_DRAFT':
+      // both actions reset draft from committed — kept as separate
+      // action types because they're triggered by different events
+      // (user cancel vs. opening the panel), even though the state
+      // change is identical
       return { ...state, draft: [...state.committed] }
+
     default:
       return state
   }
