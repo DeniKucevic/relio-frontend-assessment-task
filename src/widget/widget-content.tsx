@@ -1,11 +1,13 @@
 import { useCallback } from 'react'
 
 import { TagList } from '@/components/tag-list'
+import { usePanel } from '@/context/panel-context'
 import {
-    actions,
-    useSelectionDispatch,
-    useSelectionState,
+  actions,
+  useSelectionDispatch,
+  useSelectionState,
 } from '@/context/selection-context'
+import { useToast } from '@/context/toast-context'
 import { Box, Button, Typography } from '@mui/material'
 
 import { SelectionPanel } from './selection-panel'
@@ -19,16 +21,19 @@ type WidgetContentProps = {
 export const WidgetContent = ({ items }: WidgetContentProps) => {
   const state = useSelectionState()
   const dispatch = useSelectionDispatch()
+  const panel = usePanel()
+  const { showToast } = useToast()
 
   const handleTagRemove = useCallback(
     (id: number) => {
       dispatch(actions.removeCommitted(id))
+      showToast('Item removed from selection', 'info')
     },
-    [dispatch],
+    [dispatch, showToast],
   )
 
   const handleOpenPanel = useCallback(() => {
-    dispatch(actions.openPanel())
+    panel.open()
   }, [dispatch])
 
   return (
@@ -43,7 +48,7 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
       <Button variant="contained" color="primary" onClick={handleOpenPanel}>
         Change my choice
       </Button>
-      {state.isPanelOpen ? <SelectionPanel items={items} /> : null}
+      {panel.isOpen ? <SelectionPanel items={items} /> : null}
     </Box>
   )
 }

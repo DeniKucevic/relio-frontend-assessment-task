@@ -1,22 +1,25 @@
 import { useCallback, useMemo, useState } from 'react'
 
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { ElementList } from '@/components/element-list'
 import { TagList } from '@/components/tag-list'
 import { MAX_SELECTED, SEARCH_DEBOUNCE_MS } from '@/config'
+import { usePanel } from '@/context/panel-context'
 import {
-    actions,
-    useSelectionDispatch,
-    useSelectionState,
+  actions,
+  useSelectionDispatch,
+  useSelectionState,
 } from '@/context/selection-context'
+import { useToast } from '@/context/toast-context'
 import { useDebounce } from '@/hooks/useDebounce'
 import { applyFilter } from '@/utils/filter-items'
 import {
-    Button,
-    ButtonGroup,
-    Input,
-    MenuItem,
-    Paper,
-    Select,
+  Button,
+  ButtonGroup,
+  Input,
+  MenuItem,
+  Paper,
+  Select,
 } from '@mui/material'
 
 import type { FilterOption, Item } from '@/types'
@@ -28,7 +31,10 @@ type SelectionPanelProps = {
 export const SelectionPanel = ({ items }: SelectionPanelProps) => {
   const state = useSelectionState()
   const dispatch = useSelectionDispatch()
+  const panel = usePanel()
+  const { showToast } = useToast()
 
+  const [confirmOpen, setConfirmOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('none')
   const debouncedSearchQuery = useDebounce(searchQuery, SEARCH_DEBOUNCE_MS)
@@ -39,6 +45,12 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
     const q = debouncedSearchQuery.trim().toLowerCase()
     return byFilter.filter((i) => i.label.toLowerCase().includes(q))
   }, [items, selectedFilter, debouncedSearchQuery])
+
+  const hasPendingChanges = useMemo(() => {
+    if (state.draft.length !== state.committed.length) return true
+    const committedIds = new Set(state.committed.map((i) => i.id))
+    return state.draft.some((i) => !committedIds.has(i.id))
+  }, [state.draft, state.committed])
 
   const selectedIds = useMemo(
     () => new Set(state.draft.map((i) => i.id)),
@@ -61,11 +73,26 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
 
   const handleSave = useCallback(() => {
     dispatch(actions.save())
-  }, [dispatch])
+    panel.close()
+    showToast('Selection saved')
+  }, [dispatch, showToast])
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
+    if (hasPendingChanges) {
+      setConfirmOpen(true)
+    } else {
+      dispatch(actions.cancel())
+      panel.close()
+      showToast('Selection cancelled', 'info')
+    }
+  }
+
+  const handleDiscard = useCallback(() => {
     dispatch(actions.cancel())
-  }, [dispatch])
+    panel.close()
+    setConfirmOpen(false)
+    showToast('Changes discarded', 'info')
+  }, [dispatch, showToast])
 
   return (
     <Paper>
@@ -95,6 +122,15 @@ export const SelectionPanel = ({ items }: SelectionPanelProps) => {
         <Button onClick={handleSave}>Save</Button>
         <Button onClick={handleCancel}>Cancel</Button>
       </ButtonGroup>
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Discard changes?"
+        message="You have unsaved changes. Are you sure you want to discard them?"
+        confirmLabel="Discard"
+        cancelLabel="Keep editing"
+        onConfirm={handleDiscard}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </Paper>
   )
 }

@@ -7,17 +7,14 @@ import type { Item } from '@/types'
 type State = {
   committed: Item[]
   draft: Item[]
-  isPanelOpen: boolean
 }
 
-const initialState: State = {
+export const initialState: State = {
   committed: [],
   draft: [],
-  isPanelOpen: false,
 }
 
 export type Action =
-  | { type: 'OPEN_PANEL' }
   | { type: 'TOGGLE_ITEM'; item: Item }
   | { type: 'REMOVE_DRAFT'; id: Item['id'] }
   | { type: 'REMOVE_COMMITTED'; id: Item['id'] }
@@ -26,7 +23,6 @@ export type Action =
 
 // Action creators
 export const actions = {
-  openPanel: (): Action => ({ type: 'OPEN_PANEL' }),
   toggleItem: (item: Item): Action => ({ type: 'TOGGLE_ITEM', item }),
   removeDraft: (id: Item['id']): Action => ({ type: 'REMOVE_DRAFT', id }),
   removeCommitted: (id: Item['id']): Action => ({
@@ -37,10 +33,8 @@ export const actions = {
   cancel: (): Action => ({ type: 'CANCEL' }),
 }
 
-const reducer = (state: State, action: Action): State => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'OPEN_PANEL':
-      return { ...state, draft: [...state.committed], isPanelOpen: true }
     case 'TOGGLE_ITEM': {
       const isSelected = state.draft.some((i) => i.id === action.item.id)
       if (isSelected)
@@ -59,9 +53,9 @@ const reducer = (state: State, action: Action): State => {
         committed: state.committed.filter((i) => i.id !== action.id),
       }
     case 'SAVE':
-      return { ...state, committed: [...state.draft], isPanelOpen: false }
+      return { ...state, committed: [...state.draft] }
     case 'CANCEL':
-      return { ...state, draft: [...state.committed], isPanelOpen: false }
+      return { ...state, draft: [...state.committed] }
     default:
       return state
   }
