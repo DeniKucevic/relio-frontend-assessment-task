@@ -2,11 +2,11 @@
 
 ![CI](https://github.com/DeniKucevic/relio-frontend-assessment-task/actions/workflows/ci.yml/badge.svg)
 
+**Live demo:** [LIVE DEMO](https://relio-frontend-assessment-task.vercel.app/)
+
 A widget for selecting up to 3 elements from a large list, with search, filtering, and a virtualized scrollable list. Built for Relio's frontend assignment.
 
 ![Selection widget screenshot](docs/screenshot.png)
-
-**Live demo:** [LIVE DEMO](https://relio-frontend-assessment-task.vercel.app/)
 
 ## Tech stack
 
