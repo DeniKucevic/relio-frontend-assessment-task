@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import { TagList } from '@/components/tag-list'
 import { usePanel } from '@/context/panel-context'
 import {
@@ -19,10 +21,18 @@ type WidgetContentProps = {
 }
 
 export const WidgetContent = ({ items }: WidgetContentProps) => {
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const wasOpen = useRef(false)
+
   const state = useSelectionState()
   const dispatch = useSelectionDispatch()
   const panel = usePanel()
   const { showToast } = useToast()
+
+  useEffect(() => {
+    if (wasOpen.current && !panel.isOpen) triggerRef.current?.focus()
+    wasOpen.current = panel.isOpen
+  }, [panel.isOpen])
 
   const handleTagRemove = (id: number) => {
     dispatch(actions.removeCommitted(id))
@@ -65,6 +75,7 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
           </Typography>
         )}
         <Button
+          ref={triggerRef}
           variant="contained"
           color="primary"
           onClick={handleOpenPanel}
