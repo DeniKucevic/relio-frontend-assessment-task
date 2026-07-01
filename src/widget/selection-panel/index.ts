@@ -1,2 +1,1 @@
-export { SelectionPanel } from './selection-panel';
-
+export { SelectionPanel } from './selection-panel'

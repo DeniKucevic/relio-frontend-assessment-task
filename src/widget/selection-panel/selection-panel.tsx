@@ -50,7 +50,7 @@ export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
       showToast(STRINGS.toast.saved)
     }
 
-    const handleCancel = () => {
+    const requestClose = () => {
       if (hasPendingChanges(state.draft, state.committed)) {
         setConfirmOpen(true)
       } else {
@@ -101,7 +101,7 @@ export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
           </Typography>
           <IconButton
             size="small"
-            onClick={handleCancel}
+            onClick={requestClose}
             aria-label={STRINGS.aria.closePanel}
           >
             <CloseIcon fontSize="small" />
@@ -124,14 +124,11 @@ export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
           draftItems={state.draft}
           onRemoveDraft={(id) => dispatch(actions.removeDraft(id))}
           onSave={handleSave}
-          onCancel={handleCancel}
+          onCancel={requestClose}
         />
         <ConfirmDialog
           open={confirmOpen}
-          title={STRINGS.confirm.title}
           message={STRINGS.confirm.message}
-          confirmLabel={STRINGS.confirm.confirmLabel}
-          cancelLabel={STRINGS.confirm.cancelLabel}
           onConfirm={handleDiscard}
           onCancel={() => setConfirmOpen(false)}
         />

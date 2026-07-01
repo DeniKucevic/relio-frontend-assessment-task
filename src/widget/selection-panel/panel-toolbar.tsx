@@ -1,4 +1,4 @@
-import { FILTER_OPTIONS } from '@/shared/config'
+import { FILTER_OPTIONS, type FilterOption } from '@/shared/config'
 import { FILTER_SELECT_MIN_WIDTH } from '@/shared/sizing'
 import { STRINGS } from '@/shared/strings'
 import {
@@ -9,8 +9,6 @@ import {
   Select,
   TextField,
 } from '@mui/material'
-
-import type { FilterOption } from '@/shared/types'
 
 type PanelToolbarProps = {
   searchQuery: string

@@ -1,8 +1,8 @@
 // src/widget/selection-widget.test.tsx
 import {
-    render,
-    screen,
-    waitForElementToBeRemoved,
+  render,
+  screen,
+  waitForElementToBeRemoved,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'

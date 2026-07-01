@@ -29,11 +29,10 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
     showToast(STRINGS.toast.itemRemoved, 'info')
   }
 
-  const handleTogglePanel = () => {
-    if (!panel.isOpen) {
-      dispatch(actions.syncDraft())
-    }
-    panel.toggle()
+  const handleOpenPanel = () => {
+    if (panel.isOpen) return
+    dispatch(actions.syncDraft())
+    panel.open()
   }
 
   return (
@@ -68,7 +67,7 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleTogglePanel}
+          onClick={handleOpenPanel}
           sx={{ alignSelf: 'flex-start' }}
         >
           {STRINGS.widget.changeChoice}

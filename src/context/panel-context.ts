@@ -4,7 +4,6 @@ export type PanelContextValue = {
   isOpen: boolean
   open: () => void
   close: () => void
-  toggle: () => void
 }
 
 export const PanelContext = createContext<PanelContextValue | null>(null)
