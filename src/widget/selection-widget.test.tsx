@@ -1,9 +1,4 @@
-// src/widget/selection-widget.test.tsx
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -28,42 +23,53 @@ const items = [
 ]
 
 describe('SelectionWidget', () => {
-  it('opens and closes the panel when clicking Change my choice', async () => {
+  it('opens the panel when clicking Change my choice', async () => {
     const user = userEvent.setup()
     render(<SelectionWidget items={items} />)
 
-    const toggleButton = screen.getByRole('button', {
-      name: /change my choice/i,
-    })
-    await user.click(toggleButton)
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /change my choice/i }))
+    expect(
+      screen.getByRole('region', { name: /select items/i }),
+    ).toBeInTheDocument()
+  })
 
-    await user.click(toggleButton)
-    await waitForElementToBeRemoved(() => screen.queryByRole('dialog'))
+  it('closes the panel via Cancel when there are no changes', async () => {
+    const user = userEvent.setup()
+    render(<SelectionWidget items={items} />)
+
+    await user.click(screen.getByRole('button', { name: /change my choice/i }))
+    await user.click(screen.getByRole('button', { name: /^cancel$/i }))
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('region', { name: /select items/i }),
+      ).not.toBeInTheDocument(),
+    )
   })
 
   it('does not persist unsaved selections across close and reopen', async () => {
     const user = userEvent.setup()
     render(<SelectionWidget items={items} />)
 
-    const toggleButton = screen.getByRole('button', {
-      name: /change my choice/i,
-    })
-
-    await user.click(toggleButton)
+    const openButton = screen.getByRole('button', { name: /change my choice/i })
+    await user.click(openButton)
 
     const checkbox = screen.getByRole('checkbox', { name: /select element 1/i })
     await user.click(checkbox)
     expect(checkbox).toBeChecked()
 
-    await user.click(toggleButton)
-    await waitForElementToBeRemoved(() => screen.queryByRole('dialog'))
+    await user.click(screen.getByRole('button', { name: /^cancel$/i }))
+    await user.click(await screen.findByRole('button', { name: /discard/i }))
 
-    await user.click(toggleButton)
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('region', { name: /select items/i }),
+      ).not.toBeInTheDocument(),
+    )
 
-    const reopenedCheckbox = screen.getByRole('checkbox', {
-      name: /select element 1/i,
-    })
-    expect(reopenedCheckbox).not.toBeChecked()
+    await user.click(openButton)
+    expect(
+      await screen.findByRole('checkbox', { name: /select element 1/i }),
+    ).not.toBeChecked()
   })
 })

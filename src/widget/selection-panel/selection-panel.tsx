@@ -71,8 +71,7 @@ export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
       <Paper
         ref={ref}
         variant="outlined"
-        role="dialog"
-        aria-modal="true"
+        role="region"
         aria-label={STRINGS.aria.panelLabel}
         sx={{
           mt: 2,

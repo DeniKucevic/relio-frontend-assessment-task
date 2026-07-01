@@ -1,6 +1,6 @@
-import { FILTER_OPTIONS } from '@/shared/config'
+import { FILTER_OPTIONS, type FilterOption } from '@/shared/config'
 
-import type { FilterOption, Item } from '@/shared/types'
+import type { Item } from '@/shared/types'
 
 /**
  * Applies a filter to an array of items based on the specified filter option.
