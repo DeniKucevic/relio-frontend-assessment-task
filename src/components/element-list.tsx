@@ -37,6 +37,7 @@ export const ElementList = ({
     count: items.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => LIST_ROW_HEIGHT,
+    overscan: 5,
   })
 
   if (items.length === 0) {
@@ -97,14 +98,12 @@ export const ElementList = ({
                 onClick={() => onToggle(item)}
                 disabled={disabled}
                 selected={checked}
-                sx={{
-                  '&:hover': { bgcolor: 'action.hover' },
-                }}
               >
                 <ListItemIcon>
                   <Checkbox
                     checked={checked}
                     disableRipple
+                    tabIndex={-1}
                     slotProps={{
                       input: {
                         'aria-label': STRINGS.aria.selectItem(item.label),

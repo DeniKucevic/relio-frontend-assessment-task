@@ -83,7 +83,7 @@ src/
 
 ## Testing
 
-22 tests across reducer logic, pure utilities, a custom hook, and one integration test covering the trickiest behavioral bug found during development (selection state staying in sync when the panel is closed and reopened without saving). Run with `npm run test`.
+26 tests across reducer logic, pure utilities, a custom hook, and one integration test covering the trickiest behavioral bug found during development (selection state staying in sync when the panel is closed and reopened without saving). Run with `npm run test`.
 
 ## Beyond the spec
 

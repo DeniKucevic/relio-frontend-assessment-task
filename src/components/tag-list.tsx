@@ -5,7 +5,7 @@ import type { Item } from '@/shared/types'
 
 type TagListProps = {
   items: Item[]
-  onRemove: (id: number) => void
+  onRemove?: (id: number) => void
 }
 
 export const TagList = ({ items, onRemove }: TagListProps) => {
@@ -18,8 +18,10 @@ export const TagList = ({ items, onRemove }: TagListProps) => {
           color="primary"
           variant="outlined"
           size="small"
-          aria-label={STRINGS.aria.removeItem(item.label)}
-          onDelete={() => onRemove(item.id)}
+          aria-label={
+            onRemove ? STRINGS.aria.removeItem(item.label) : undefined
+          }
+          onDelete={onRemove ? () => onRemove(item.id) : undefined}
         />
       ))}
     </Box>

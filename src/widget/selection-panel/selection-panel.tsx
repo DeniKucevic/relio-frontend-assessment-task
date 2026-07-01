@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from 'react'
+import { type HTMLAttributes, forwardRef, useMemo, useState } from 'react'
 
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { ElementList } from '@/components/element-list'
@@ -21,10 +21,10 @@ import { PanelToolbar } from './panel-toolbar'
 
 import type { Item } from '@/shared/types'
 
-type SelectionPanelProps = { items: Item[] }
+type SelectionPanelProps = { items: Item[] } & HTMLAttributes<HTMLDivElement>
 
 export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
-  ({ items }, ref) => {
+  ({ items, ...rest }, ref) => {
     const state = useSelectionState()
     const dispatch = useSelectionDispatch()
     const panel = usePanel()
@@ -70,6 +70,7 @@ export const SelectionPanel = forwardRef<HTMLDivElement, SelectionPanelProps>(
     return (
       <Paper
         ref={ref}
+        {...rest}
         variant="outlined"
         role="region"
         aria-label={STRINGS.aria.panelLabel}
