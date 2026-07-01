@@ -70,7 +70,9 @@ export const WidgetContent = ({ items }: WidgetContentProps) => {
           onClick={handleOpenPanel}
           sx={{ alignSelf: 'flex-start' }}
         >
-          {STRINGS.widget.changeChoice}
+          {state.committed.length > 0
+            ? STRINGS.widget.changeChoice
+            : STRINGS.widget.selectChoice}
         </Button>
       </Stack>
       <Fade in={panel.isOpen} unmountOnExit>

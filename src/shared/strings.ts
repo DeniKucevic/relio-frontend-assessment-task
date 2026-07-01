@@ -1,6 +1,7 @@
 export const STRINGS = {
   widget: {
     title: 'Select items',
+    selectChoice: 'Select items',
     changeChoice: 'Change my choice',
     noItemsSelected: 'No items selected.',
     selectedCount: (count: number) =>

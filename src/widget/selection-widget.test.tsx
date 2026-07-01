@@ -27,7 +27,7 @@ describe('SelectionWidget', () => {
     const user = userEvent.setup()
     render(<SelectionWidget items={items} />)
 
-    await user.click(screen.getByRole('button', { name: /change my choice/i }))
+    await user.click(screen.getByRole('button', { name: /select items/i }))
     expect(
       screen.getByRole('region', { name: /select items/i }),
     ).toBeInTheDocument()
@@ -37,7 +37,7 @@ describe('SelectionWidget', () => {
     const user = userEvent.setup()
     render(<SelectionWidget items={items} />)
 
-    await user.click(screen.getByRole('button', { name: /change my choice/i }))
+    await user.click(screen.getByRole('button', { name: /select items/i }))
     await user.click(screen.getByRole('button', { name: /^cancel$/i }))
 
     await waitFor(() =>
@@ -51,7 +51,7 @@ describe('SelectionWidget', () => {
     const user = userEvent.setup()
     render(<SelectionWidget items={items} />)
 
-    const openButton = screen.getByRole('button', { name: /change my choice/i })
+    const openButton = screen.getByRole('button', { name: /select items/i })
     await user.click(openButton)
 
     const checkbox = screen.getByRole('checkbox', { name: /select element 1/i })
