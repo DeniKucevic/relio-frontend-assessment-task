@@ -37,9 +37,13 @@ export const actions = {
 
 const toggleItemInDraft = (draft: Item[], item: Item): Item[] => {
   const isSelected = draft.some((i) => i.id === item.id)
-  if (isSelected) return draft.filter((i) => i.id !== item.id)
+  if (isSelected) return removeItemById(draft, item.id)
   if (draft.length >= MAX_SELECTED) return draft
   return [...draft, item]
+}
+
+const removeItemById = (items: Item[], id: Item['id']): Item[] => {
+  return items.filter((i) => i.id !== id)
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -47,10 +51,10 @@ export const reducer = (state: State, action: Action): State => {
     case 'TOGGLE_ITEM':
       return { ...state, draft: toggleItemInDraft(state.draft, action.item) }
     case 'REMOVE_DRAFT':
-      return { ...state, draft: state.draft.filter((i) => i.id !== action.id) }
+      return { ...state, draft: removeItemById(state.draft, action.id) }
     case 'REMOVE_COMMITTED': {
-      const committed = state.committed.filter((i) => i.id !== action.id)
-      const draft = state.draft.filter((i) => i.id !== action.id)
+      const committed = removeItemById(state.committed, action.id)
+      const draft = removeItemById(state.draft, action.id)
       return { ...state, committed, draft }
     }
     case 'SAVE':
