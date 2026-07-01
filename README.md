@@ -81,7 +81,7 @@ src/
 
 ## Testing
 
-20 tests across reducer logic, pure utilities, a custom hook, and one integration test covering the trickiest behavioral bug found during development (selection state staying in sync when the panel is closed and reopened without saving). Run with `npm run test`.
+22 tests across reducer logic, pure utilities, a custom hook, and one integration test covering the trickiest behavioral bug found during development (selection state staying in sync when the panel is closed and reopened without saving). Run with `npm run test`.
 
 ## Beyond the spec
 
@@ -90,7 +90,7 @@ A few additions beyond the literal requirements, included as polish:
 - Toast notifications on save/cancel/discard/remove
 - Confirm-discard dialog when closing with unsaved changes
 - Open/close animation (`Fade`)
-- Accessibility: dialog semantics, labeled form controls, ARIA labels on icon-only controls
+- Accessibility: labeled region + confirm-dialog semantics, labeled form controls, ARIA labels on icon-only controls
 - Error boundary around the widget
 
 ## What I'd add with more time / a real backend

@@ -23,7 +23,7 @@ const items = [
 ]
 
 describe('SelectionWidget', () => {
-  it('opens the panel when clicking Change my choice', async () => {
+  it('opens the panel when clicking Select items', async () => {
     const user = userEvent.setup()
     render(<SelectionWidget items={items} />)
 
@@ -71,5 +71,33 @@ describe('SelectionWidget', () => {
     expect(
       await screen.findByRole('checkbox', { name: /select element 1/i }),
     ).not.toBeChecked()
+  })
+
+  it('saves the selection and reflects it on the main page', async () => {
+    const user = userEvent.setup()
+    render(<SelectionWidget items={items} />)
+
+    await user.click(screen.getByRole('button', { name: /select items/i }))
+    await user.click(
+      screen.getByRole('checkbox', { name: /select element 1/i }),
+    )
+    await user.click(screen.getByRole('button', { name: /^save$/i }))
+
+    // Panel closes...
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('region', { name: /select items/i }),
+      ).not.toBeInTheDocument(),
+    )
+
+    // ...and the committed selection is now shown on the main page.
+    expect(
+      screen.getByText('You currently have 1 item selected.'),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Element 1')).toBeInTheDocument()
+    // With a selection present, the trigger label switches.
+    expect(
+      screen.getByRole('button', { name: /change my choice/i }),
+    ).toBeInTheDocument()
   })
 })
